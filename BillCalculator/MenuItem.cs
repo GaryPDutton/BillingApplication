@@ -12,5 +12,6 @@ namespace BillingApplication
         public string Product { get; set; }
         public string Temperature { get; set; }
         public double Cost { get; set; }
+        public string Category { get; set; }
     }
 }

@@ -18,19 +18,23 @@ namespace BillingApplication
                     new MenuItem {
                     Product= "Cola",
                     Temperature= "Cold",  
-                    Cost= 0.5
+                    Cost= 0.5,
+                    Category = "Drink"
                 }, new MenuItem {
                     Product= "Coffee",
                     Temperature= "Hot",  
-                    Cost= 1
+                    Cost= 1,
+                    Category = "Drink"
                 }, new MenuItem {
                     Product= "Cheese Sandwich",
                     Temperature= "Cold",  
-                    Cost= 2
+                    Cost= 2,
+                    Category = "Food"
                 }, new MenuItem {
                     Product= "Steak Sandwich",
                     Temperature= "Hot",  
-                    Cost= 4.5
+                    Cost= 4.5,
+                    Category = "Food"
                 }};
 
              //Return menu items
