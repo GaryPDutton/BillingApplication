@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace BillingApplication
 {
     //Class representing a item on the menu
-    class MenuItem
+    public class MenuItem
     {
         public string Product { get; set; }
         public string Temperature { get; set; }

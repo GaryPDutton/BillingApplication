@@ -14,67 +14,37 @@ namespace BillingApplication
         private const double SERVICE_CHARGE_HOT = 0.2;
         private const double MAX_SERVICE_CHARGE = 20;
 
-        //Check if any items are Hot
+        public static IEnumerable<MenuItem> getMenuItems(IEnumerable<string> orderItems)
+        {
+            //Get menu items
+            var menuItems = Menu.get().ToList(); ;
+
+            //Build collection of menuItems matching the order
+            var returnItems = orderItems.Select(product => menuItems.Find(item => item.Product == product)).ToList();
+
+            return returnItems;
+        }
+
+        //Check if any items are Hot Food
         public static bool containsHotFood(IEnumerable<string> orderItems)
         {
-            //Get the menu items 
-            var menuItems = Menu.get();
-
-            //Loop through order checking temperature
-            foreach (var product in orderItems)
-            {
-                //Get temperature and return true if is a Hot item
-                var menuItem = menuItems.Where(item => item.Product == product).First();
-                if (menuItem.Temperature == "Hot" && menuItem.Category == "Food")
-                {
-                    return true;
-                }
-                    
-            }
-
-            return false;
+            //Check if any items are Hot Food
+           return getMenuItems(orderItems).Where(item => item.Category == "Food" && item.Temperature == "Hot").Count() > 0;
         }
 
         //Check if any items are Food
         public static bool containsFood(IEnumerable<string> orderItems)
         {
-            //Get the menu items 
-            var menuItems = Menu.get();
-
-            //Loop through order checking category
-            foreach (var product in orderItems)
-            {
-                //Get category and return true if is a Food item
-                var category = menuItems.Where(item => item.Product == product).First().Category;
-                if(category == "Food")
-                {
-                    return true;
-                }
-                    
-            }
-
-            return false;
+            //Check if any items are Food
+            return getMenuItems(orderItems).Where(item => item.Category == "Food").Count() > 0;
         }
 
 
         //Calculate the bill for the supplied order items
         public static double calculateBill(IEnumerable<string> orderItems)
         {
-            double total = 0;
-
-            //Get the menu items 
-            var menuItems = Menu.get();
-
-            //Loop through order adding cost for each item to the total
-            foreach(var product in orderItems)
-            {
-                //Add the total for matching items
-                //Todo: No requirement to handle erros for products not on menu 
-                total += menuItems
-                    .Where(item => item.Product == product)
-                    .First()
-                    .Cost;
-            }
+            //Get the sum of all the items on the menu
+            double total = getMenuItems(orderItems).Sum(item => item.Cost);
 
             return total;
         }
@@ -100,10 +70,7 @@ namespace BillingApplication
                 }
 
                 //If the service charge is above the maximum set it to the maximum
-                if (serviceCharge > MAX_SERVICE_CHARGE)
-                {
-                    serviceCharge = MAX_SERVICE_CHARGE;
-                }
+                serviceCharge = Math.Min(serviceCharge, MAX_SERVICE_CHARGE);
             }
 
             //Round the service charge to 2 decimal places and return
